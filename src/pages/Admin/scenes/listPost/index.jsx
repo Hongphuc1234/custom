@@ -10,31 +10,24 @@ import { useSelector } from 'react-redux';
 import Swal from 'sweetalert2';
 import './user-history.scss';
 
-const HistoryBooking = () => {
+const HistoryPost = () => {
     const [teamData, setTeamData] = useState([]);
     const user = useSelector((state) => state.auth.login?.currenUser);
     useEffect(() => {
         console.log(user);
-        if (user && user.phone) {
-            console.log('Fetching data for user:', user.phone); // Debugging
+        if (user && user.id) {
+           
             axios
-                .get(`/bookings/history/${user.phone}`)
+                .get(`/service/listpost/${user.id}`)
                 .then((res) => {
-                    const bookingHistory = res.data;
-                    console.log('Fetched data:', bookingHistory); // Debugging
-                    setTeamData(bookingHistory);
+                    const listpost = res.data;
+                
+                    setTeamData(listpost);
                 })
                 .catch((error) => console.log('Error fetching data:', error)); // Debugging
         }
     }, [user]);
 
-   const payment = (row) =>
-   {
-        axios.post(`/checkout/re-create-payment?bookingid=${row}`
-        ).then((res)=>{
-            window.location.href = res.data.url;
-        })
-   }
 
 
    const huy= (id) => {
@@ -69,14 +62,21 @@ const HistoryBooking = () => {
     const columns = [
         { field: 'id', headerName: 'ID', flex: 0.5 },
         {
-            field: 'date',
-            headerName: 'Ngày tháng',
+            field: 'name',
+            headerName: 'Tên dịch vụ',
             type: 'number',
             flex: 1.5,
             headerAlign: 'left',
             align: 'left',
         },
-     
+        {
+            field: 'description',
+            headerName: 'Mô tả ',
+            type: 'number',
+            flex: 1.5,
+            headerAlign: 'left',
+            align: 'left',
+        },
         {
             field: 'status',
             headerName: 'Trạng thái',
@@ -98,31 +98,21 @@ const HistoryBooking = () => {
                 );
             },
         },
-        {
-            field: 'payment',
-            headerName: 'Trạng thái thanh toán',
-            flex: 2,
-            type: 'text',
-            headerAlign: 'left',
-            align: 'left',
-            renderCell: ({ row }) => {
-                return <span>{row.payment === 0 ? 'Chưa thanh toán' : 'Đã thanh toán'}</span>;
-            },
-        },
+    
         {
             field: 'img',
-            headerName: 'Trạng thái thanh toán',
+            headerName: 'ảnh dịch vụ',
             flex: 2,
             type: 'text',
             headerAlign: 'left',
             align: 'left',
             renderCell: ({ row }) => {
-                return <img src={user.img} style={{height:"60px",width:"60px"}} alt="" />
+                return <img src={row.img} style={{height:"60px",width:"60px"}} alt="" />
             },
         },
         {
-            field: 'totalPrice',
-            headerName: 'Tổng tiền',
+            field: 'price',
+            headerName: 'Giá ',
             flex: 1.5,
             headerAlign: 'left',
             align: 'left',
@@ -144,28 +134,7 @@ const HistoryBooking = () => {
         //     },
         // },
        
-        {
-            field: 'thanhtoan',
-            headerName: 'thanh toán đơn hàng',
-            flex: 2,
-            type: 'text',
-            headerAlign: 'left',
-            align: 'left',
-            renderCell: ({ row }) => {
-                return  (row.payment === 0 && row.status!=1 && row.status!=3) ? (
-                    <Box>
-                        <Button
-                            color="secondary"
-                            variant="contained"
-                            sx={{ fontFamily: 'Lora, serif' }}
-                            onClick={() => payment(row.id)} 
-                        >
-                            Thanh toán
-                        </Button>
-                    </Box>
-                ) : null;
-            },
-        },
+        
         {
             field: 'Huy',
             headerName: 'Hủy đơn hàng',
@@ -174,7 +143,7 @@ const HistoryBooking = () => {
             headerAlign: 'left',
             align: 'left',
             renderCell: ({ row }) => {
-                return  (row.payment === 0 && row.status==0) ? (
+                return (
                     <Box>
                         <Button
                             color="secondary"
@@ -185,7 +154,7 @@ const HistoryBooking = () => {
                             Hủy
                         </Button>
                     </Box>
-                ) : null;
+                )   
             },
         },
     ];
@@ -251,4 +220,4 @@ const HistoryBooking = () => {
     );
 };
 
-export default HistoryBooking;
+export default HistoryPost;

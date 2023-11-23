@@ -8,10 +8,12 @@ import InputAdornment from '@mui/material/InputAdornment';
 import { useState } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { useDispatch, useSelector } from 'react-redux';
 import * as React from 'react';
 import DeleteIcon from '@mui/icons-material/Delete';
 const Form = () => {
     const [itemData, setItemData] = useState([]);
+    const user = useSelector((state) => state.auth.login?.currenUser);
     function isImageFile(file) {
         const acceptedImageTypes = ['image/jpeg', 'image/png', 'image/gif'];
         const acceptedExtensions = ['.jpg', '.jpeg', '.png', '.gif'];
@@ -48,6 +50,7 @@ const Form = () => {
                 description:values.description,
                 img: imageBase64,
                 imgList: newImages,
+                userid:user.id,
             };
             axios
                 .post(`/service`, formValues)
