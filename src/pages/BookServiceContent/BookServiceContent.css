@@ -1,0 +1,308 @@
+/* base css */
+.header {
+    background: url('https://theme.hstatic.net/1000181446/1000235350/14/image_breadcrumb_bg.png?v=1737') no-repeat top center;
+    aspect-ratio: 4 / 3;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-size: cover;
+}
+.grid {
+    width: 100%;
+}
+
+.grid-row {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+}
+
+.grid-col-6 {
+    width: 45%;
+}
+
+.grid-col-3 {
+    width: 30%;
+}
+
+.grid-col {
+    width: 8.3333%;
+}
+
+.selected {
+    color: rgb(246, 109, 109) !important;
+    background-color: #000 !important;
+}
+
+/* main css */
+.book-service-content {
+    width: 100%;
+    margin: 40px 0;
+}
+
+.book-service {
+    background-color: #f9f9f9;
+}
+
+.service-name {
+    text-align: center;
+    margin-top: 10px;
+    font-weight: 600;
+}
+
+.branch,
+.staff,
+.book-date-time {
+    text-align: left;
+    margin: 15px;
+}
+
+.branch-select {
+    width: 100%;
+    padding: 7px;
+    border: 1px solid rgb(246, 109, 109);
+    border-radius: 5px;
+    outline: none;
+    cursor: pointer;
+    background-color: rgb(246, 109, 109);
+}
+
+.staff-select {
+    width: 100%;
+    padding: 7px;
+    border: 1px solid rgb(246, 109, 109);
+    border-radius: 5px;
+    outline: none;
+    cursor: pointer;
+    background-color: rgb(246, 109, 109);
+}
+
+.staff-select option {
+    margin-top: 50px;
+}
+
+.date-booking-item,
+.time-booking-item {
+    width: 60px;
+    height: 25px;
+    border: transparent;
+    border-radius: 3px;
+    margin-bottom: 15px;
+    text-align: center;
+    background-color: rgb(246, 109, 109);
+    color: #000;
+    cursor: not-allowed;
+}
+
+.time-status,
+.time-selected,
+.time-still,
+.time-out {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.time-selected-color {
+    width: 15px;
+    height: 15px;
+    margin-right: 7px;
+    background-color: #000;
+}
+
+.time-still-color {
+    width: 15px;
+    height: 15px;
+    margin-right: 7px;
+    background-color: #fff;
+}
+
+.time-out-color {
+    width: 15px;
+    height: 15px;
+    margin-right: 7px;
+    background-color: #ccc;
+}
+
+.status-name {
+    margin-right: 20px;
+}
+
+.submit {
+    margin: 15px auto;
+    display: flex;
+    padding: 12px 20px;
+    border: transparent;
+    border-radius: 5px;
+    font-weight: 600;
+    background-color: rgb(246, 109, 109);
+    color: #000;
+}
+
+.submit:hover {
+    color: rgb(246, 109, 109);
+    background-color: #000;
+}
+
+
+.staff-info {
+    min-height: 46%;
+    background-color: #f9f9f9;
+}
+
+.staff-info-content {
+    padding-top: 10px;
+    text-align: center;
+    font-weight: 600;
+}
+
+.staff-items {
+    margin: 10px 20px 0;
+    display: flex;
+}
+
+.staff-image {
+    width: 20%;
+    height: 20%;
+    margin-left: 20px;
+    border-radius: 50%;
+}
+
+.staff-item-content {
+    width: 100%;
+    margin-left: 25px;
+    text-align: left;
+}
+
+.staff-item-info {
+    font-size: 18px;
+}
+
+.staff-name {
+    text-transform: uppercase;
+}
+
+.branch-info {
+    height: 45%;
+    background-color: rgb(246, 109, 109);
+    margin-bottom: 61px;
+}
+
+.booking-active {
+    background-color: rgb(246, 109, 109);
+    color: #000;
+}
+
+.booking-active:hover {
+    color: rgb(246, 109, 109);
+    background-color: #000;
+}
+
+/* Responsive */
+
+@media (max-width: 1400px) {
+    .branch-item {
+        width: 45%;
+    }
+}
+
+@media (min-width: 1024px) and (max-width: 1399px) {
+    .branch-item {
+        width: 45%;
+    }
+
+    .date-booking-item {
+        width: 30%;
+    }
+
+    .time-booking-item {
+        width: 30%;
+    }
+
+    .service-info {
+        height: 400px;
+    }
+
+    .map MapContainer {
+        height: 400px;
+    }
+}
+
+@media (min-width: 770px) and (max-width: 1023px) {
+    .book-service {
+        width: 94%;
+        margin-bottom: 30px;
+    }
+
+    .branch-item {
+        width: 100%;
+    }
+
+    .date-booking-item {
+        width: 30%;
+    }
+
+    .time-booking-item {
+        width: 30%;
+    }
+
+    .service-info {
+        width: 94%;
+        height: 500px;
+    }
+}
+
+/* Tablet */
+@media (min-width: 481px) and (max-width: 769px) {
+    .book-service {
+        width: 94%;
+        margin-bottom: 30px;
+    }
+
+    .branch-item {
+        width: 100%;
+    }
+
+    .date-booking-item {
+        width: 30%;
+    }
+
+    .time-booking-item {
+        width: 30%;
+    }
+
+    .service-info {
+        width: 94%;
+        height: 400px;
+    }
+}
+
+/* Mobile */
+@media (max-width: 480px) {
+    .book-service {
+        width: 94%;
+        margin-bottom: 30px;
+    }
+
+    .branch-item {
+        width: 100%;
+    }
+
+    .date-booking-item {
+        width: 40%;
+    }
+
+    .time-booking-item {
+        width: 40%;
+    }
+
+    .service-info {
+        width: 94%;
+        height: 350px;
+    }
+
+    .staff-items {
+        align-items: center;
+    }
+}

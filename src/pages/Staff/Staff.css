@@ -1,0 +1,137 @@
+/* main css */
+.breadcrumbs {
+    color: #fff;
+    margin-top: 14px;
+}
+
+.breadcrumb-link {
+    text-decoration: none;
+    color: #fff !important;
+    font-size: 16px;
+}
+
+.staff-content {
+    margin: 72px 0 10px;
+    text-align: center;
+    font-weight: 700;
+    font-size: 22px;
+}
+
+.staff-name {
+    margin-top: 20px;
+    font-weight: bold;
+}
+
+.staff-all-desc {
+    width: 70%;
+    margin: 0 auto 40px;
+    font-weight: 400;
+    text-align: justify;
+}
+
+.staff-list {
+    width: 80%;
+    margin: auto;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+    align-items: center;
+}
+
+.staff-item {
+    width: calc(100% / 3);
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 30px;
+    text-align: center;
+    align-items: center;
+}
+
+.staff-img {
+    border: 2px solid black;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.staff-item-content {
+    width: 100%;
+    margin-left: 25px;
+    text-align: left;
+}
+
+.staff-item-info {
+    font-size: 18px;
+}
+
+/* Pagination */
+.paginateContainer {
+    display: flex;
+    justify-content: center;
+    list-style: none;
+    padding: 0;
+    margin-top: 15px;
+}
+
+.paginateContainer li {
+    display: inline-block;
+    margin: 0 5px;
+    cursor: pointer;
+}
+
+.paginateContainer .disabled a {
+    display: none;
+}
+
+.paginateContainer li a {
+    padding: 8px 15px;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    background-color: #fff;
+    color: #000;
+    text-decoration: none;
+}
+
+.paginateContainer li a:hover {
+    background-color: #000;
+    color: #fff !important;
+}
+
+.paginateContainer li.active a {
+    background-color: #000;
+    color: #fff;
+}
+
+/* Responsive */
+
+/* PC */
+@media (min-width: 1301px) {
+}
+
+/* Tablet & mobile */
+@media (max-width: 1300px) {
+    .staff-item {
+        width: 33.3333%;
+    }
+}
+
+/* Tablet */
+@media (min-width: 801px) and (max-width: 1299px) {
+    .staff-item {
+        width: 50%;
+    }
+}
+
+/* Mobile */
+@media (max-width: 800px) {
+    .staff-all-desc {
+        width: 90%;
+        margin: 20px auto 15px;
+    }
+
+    .staff-item {
+        width: 100%;
+    }
+
+    .staff-list {
+        margin-bottom: 30px;
+    }
+}
