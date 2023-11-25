@@ -45,10 +45,9 @@ function Footer() {
                     </ul>
                 </div>
                 <div>
-                    <h3>giờ mở cửa </h3>
+                    <h3>Hoạt động</h3>
                     <p>
-                        Từ 7:00 - 22:00 tất cả các ngày trong tuần (trừ ngày lễ, ngày Tết). Vui lòng đến sớm 15 phút
-                        trước thời gian đã đặt lịch.
+                        Hoạt động 24/24 tất cả các ngày
                     </p>
                 </div>
                 <div>
@@ -69,13 +68,13 @@ function Footer() {
                         Mail: <a href="mailto:salonspaceteam@gmail.com">salonspaceteam@gmail.com</a>
                         <br></br>
                         <PhoneIcon className="contact-icon" />
-                        Phone: <a href="tel:0702738238">0702738238</a>
+                        Phone: <a href="tel:0888528125">0888528125</a>
                     </div>
                 </div>
             </footer>
             <div className={cx('footer-bottom')}>
                 <div className={cx('footer-bottom-element')}>@2023 All Rights reserved</div>
-                <div className={cx('footer-bottom-element')}>SalonSpaceTeam</div>
+                <div className={cx('footer-bottom-element')}>MarketHome</div>
             </div>
         </>
     );

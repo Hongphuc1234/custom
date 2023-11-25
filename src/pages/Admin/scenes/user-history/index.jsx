@@ -110,17 +110,6 @@ const HistoryBooking = () => {
             },
         },
         {
-            field: 'img',
-            headerName: 'Trạng thái thanh toán',
-            flex: 2,
-            type: 'text',
-            headerAlign: 'left',
-            align: 'left',
-            renderCell: ({ row }) => {
-                return <img src={user.img} style={{height:"60px",width:"60px"}} alt="" />
-            },
-        },
-        {
             field: 'totalPrice',
             headerName: 'Tổng tiền',
             flex: 1.5,

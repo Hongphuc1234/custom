@@ -43,12 +43,41 @@ const HistoryPost = () => {
         allowOutsideClick: false,
         preConfirm: (code) => {
             return axios
-                .get(`/bookings/delete/${id}`)
+                .get(`/receptionist/remove/${id}`)
                 .then((res) => {
                     if (id === res.data) {
                         const updatedTeamData = teamData.map((booking) => {
                             if (booking.id === id) {
                                 return { ...booking, status: 3 };
+                            }
+                            return booking;
+                        });
+                        setTeamData(updatedTeamData);
+                    }
+                })
+                .catch((error) => console.log(error));
+        },
+    });
+};
+const dang= (id) => {
+    Swal.fire({
+        html: `<h4>Xác nhận đăng lại!</h4>`,
+        // input: 'number',
+        showCancelButton: true,
+        confirmButtonText: 'Xác nhận',
+        cancelButtonText: 'Đóng',
+        showLoaderOnConfirm: true,
+        confirmButtonColor: '#4caf50',
+        cancelButtonColor: ' #D3D3D3',
+        allowOutsideClick: false,
+        preConfirm: (code) => {
+            return axios
+                .get(`/receptionist/restore/${id}`)
+                .then((res) => {
+                    if (id === res.data) {
+                        const updatedTeamData = teamData.map((booking) => {
+                            if (booking.id === id) {
+                                return { ...booking, status: 1 };
                             }
                             return booking;
                         });
@@ -87,12 +116,10 @@ const HistoryPost = () => {
             renderCell: ({ row }) => {
                 return (
                     <span>
-                        {row.status === 0
+                        {row.status === 1
                             ? 'Đang chờ'
-                            : row.status === 1
-                            ? 'Đã hoàn thành'
-                            : row.status === 2
-                            ? 'Đã chấp nhận'
+                            : row.status === 0
+                            ? 'Đã xác nhận'
                             : 'Hủy'}
                     </span>
                 );
@@ -143,7 +170,7 @@ const HistoryPost = () => {
             headerAlign: 'left',
             align: 'left',
             renderCell: ({ row }) => {
-                return (
+                return (row.status!=3) ? (
                     <Box>
                         <Button
                             color="secondary"
@@ -153,8 +180,18 @@ const HistoryPost = () => {
                         >
                             Hủy
                         </Button>
-                    </Box>
-                )   
+                    </Box>):(
+                    <Box>
+                        <Button
+                            color="success"
+                            variant="contained"
+                            sx={{ fontFamily: 'Lora, serif' }}
+                            onClick={() => dang(row.id)} 
+                        >
+                            Đăng lại
+                        </Button>
+                    </Box>);
+                   
             },
         },
     ];

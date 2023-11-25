@@ -67,7 +67,7 @@ function AcceptService() {
             allowOutsideClick: false,
             preConfirm: (code) => {
                 return axios
-                    .get(`/bookings/delete/${id}`)
+                    .get(`/receptionist/remove/${id}`)
                     .then((res) => {
                         if (id === res.data) {
                             const newArray = teamData.filter(item => item.id !== id);

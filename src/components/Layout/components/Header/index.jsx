@@ -180,10 +180,10 @@ function Header() {
                              <div className={cx('box_tippy')} tabIndex="-1" {...attrs} style={{ height: '80px' }}>
                                  <ul>
                                      <li>
-                                         <Link to={'/bookOff'}>Đặt lịch</Link>
+                                         <Link to={'/bookOff'}>Dịch vụ</Link>
                                      </li>
                                      <li>
-                                         <Link to={'/accept'}>Xác nhận</Link>
+                                         <Link to={'/accept'}>Đơn hàng</Link>
                                      </li>
                                  </ul>
                              </div>
@@ -195,7 +195,7 @@ function Header() {
                                  (currentURL === '/bookOff' || currentURL === '/accept') && 'header-active',
                              )}
                          >
-                             Lễ tân
+                             Xác Nhận
                          </li>
                      </Tippy>
                     )}
