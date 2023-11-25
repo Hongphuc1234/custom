@@ -168,7 +168,6 @@ const Form = () => {
                                 />
                                <TextField
                              id="outlined-select-currency-native"
-
                              label="Loại"
                                     onBlur={handleBlur}
                                     onChange={handleChange}
@@ -182,7 +181,9 @@ const Form = () => {
           SelectProps={{
             native: true,
           }}
-        >
+        ><option value={0}>
+        Chọn loại dịch vụ 
+        </option>
             <option value={1}>
             XE
             </option>
@@ -300,7 +301,6 @@ const checkoutSchema = yup.object().shape({
     name: yup.string().required('Không hợp lệ'),
     price: yup.number().required('Không hợp lệ'),
     description: yup.string().required('Không hợp lệ'),
-    category: yup.number().required('Không hợp lệ'),
 });
 const initialValues = {
     name: '',
