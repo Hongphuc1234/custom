@@ -6,6 +6,8 @@ import useMediaQuery from '@mui/material/useMediaQuery';
 import Header from '../../components/Header';
 import InputAdornment from '@mui/material/InputAdornment';
 import { useState, useEffect } from 'react';
+import {  useSelector } from 'react-redux';
+
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -14,6 +16,7 @@ import { Link, useNavigate, useParams } from 'react-router-dom';
 const Form = () => {
     const [itemData, setItemData] = useState([]);
     const [initialValues, setInitialValues] = useState({ name: '', price: '', status: '', description: '' });
+    const user = useSelector((state) => state.auth.login?.currenUser);
     let id = useParams();
     const navigate = useNavigate();
     useEffect(() => {
@@ -74,6 +77,7 @@ const Form = () => {
                 description: values.description,
                 img: imageBase64,
                 imgList: newImages,
+                userid :user.id,
             };
 
             axios

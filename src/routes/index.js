@@ -5,7 +5,6 @@ import Home from '~/pages/Home';
 import Cart from '~/pages/Cart';
 import Login from '~/pages/Login/index';
 import Register from '~/pages/Register/index';
-import Branch from '~/pages/Admin/scenes/branch';
 import Calendar from '~/pages/Admin/scenes/calendar/calendar';
 import Form from '~/pages/Admin/scenes/form/user';
 import FormService from '~/pages/Admin/scenes/form/service';
@@ -18,7 +17,6 @@ import ServiceEx from '~/pages/ServiceEx/ServiceEx';
 import ServiceDetail from '~/pages/ServiceDetail';
 import UserHistory from '~/pages/Admin/scenes/user-history';
 import HistoryBooking from '~/pages/Admin/scenes/history';
-import Staff from '~/pages/Staff';
 import AccessDeny from '~/pages/Admin/Status/accessDeny';
 import NotFound from '~/pages/Admin/Status/NotFound';
 import MailPage from '~/pages/ForgotPass/mailPage';
@@ -28,10 +26,9 @@ import DataService from '~/pages/Admin/scenes/service';
 import BookOff from '~/pages/Receptionist/BookOff';
 import DataUser from '~/pages/Admin/scenes/team';
 import AcceptBooking from '~/pages/Receptionist/AcceptBooking';
-import Chart from '~/pages/Admin/scenes/chart';
 import Contact from '~/pages/Contact';
-import EventData from '~/pages/Admin/scenes/event/index'
 import ResetPage from '~/ResetPass/ResetPage';
+import HistoryPost from '~/pages/Admin/scenes/listPost';
 
 // Public routes
 const publicRoutes = [
@@ -43,8 +40,6 @@ const publicRoutes = [
     { path: '/service', component: Service },
     { path: '/serviceExample', component: ServiceEx },
     { path: '/services/:id', component: ServiceDetail },
-    { path: '/staff', component: Staff },
-    { path: '/eventData', component: EventData, admin: true },
     { path: '/dataService', component: DataService, admin: true },
     { path: '/calendar', component: Calendar, admin: true },
     { path: '/form', component: Form, admin: true },
@@ -61,10 +56,10 @@ const publicRoutes = [
     { path: '/reset', component: ForgotPage, layout: null },
     { path: '/bookOff', component: BookOff },
     { path: '/dataUser', component: DataUser, admin: true },
-    { path: '/chart', component: Chart, admin: true },
     { path: '/accept', component: AcceptBooking },
     { path: '/contact', component: Contact },
     { path: '/resetpage', component:ResetPage ,layout:null },
+    { path: '/listpost', component:HistoryPost,layout:null },
     { path: '/*', component: NotFound, layout: null },
 ];
 

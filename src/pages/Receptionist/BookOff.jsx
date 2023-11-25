@@ -1,409 +1,262 @@
-import {
-    Box,
-    Button,
-    Checkbox,
-    Grid,
-    List,
-    ListItem,
-    ListItemIcon,
-    ListItemText,
-    MenuItem,
-    Paper,
-    TextField,
-    useMediaQuery,
-} from '@mui/material';
+import React, { useState, useEffect } from 'react';
+import { Box, Button } from '@mui/material';
+import { DataGrid, viVN } from '@mui/x-data-grid';
 import axios from '~/utils/api/axios';
-import { Formik } from 'formik';
-import * as yup from 'yup';
-import { useState } from 'react';
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-import * as React from 'react';
-import { useEffect } from 'react';
+import Swal from 'sweetalert2';
 import { useSelector } from 'react-redux';
+// import { Link } from 'react-router-dom';
+import isAdmin, { isReceptionist } from '~/utils/jwt';
 import { useNavigate } from 'react-router-dom';
-import { isReceptionist } from '~/utils/jwt';
-import moment from 'moment';
-
-function not(a, b) {
-    return a.filter((value) => b.indexOf(value) === -1);
-}
-
-function intersection(a, b) {
-    return a.filter((value) => b.indexOf(value) !== -1);
-}
-
-function BookOff() {
-    const isNonMobile = useMediaQuery('(min-width:600px)');
-    const [totalPrice, setTotalPrice] = useState(0);
-    const [checked, setChecked] = useState([]);
-    const [left, setLeft] = useState([]);
-    const [right, setRight] = useState([]);
-    const leftChecked = intersection(checked, left);
-    const rightChecked = intersection(checked, right);
-    const [time, setTime] = useState([]);
+import { HiCurrencyYen } from 'react-icons/hi';
+function AcceptService() {
+    const [teamData, setTeamData] = useState([]);
     const user = useSelector((state) => state.auth.login?.currenUser);
     const navigate = useNavigate();
     useEffect(() => {
-        const newTotalPrice = right.reduce((total, element) => total + element.price, 0);
-        setTotalPrice(newTotalPrice);
-    }, [right]);
-
-    useEffect(() => {
-        axios
-            .get(`/service`)
-            .then((res) => {
-                const service = res.data;
-                const modifiedData = service.map((item) => ({
-                    id: item.id,
-                    name: item.name,
-                    price: item.price,
-                }));
-                setLeft(modifiedData);
-            })
-            .catch((error) => console.log(error));
-        axios
-            .get(`/receptionist`)
-            .then((res) => {
-                setTime(res.data);
-            })
-            .catch((error) => console.log(error));
-    }, []);
-
-    const handleToggle = (value) => () => {
-        const currentIndex = checked.indexOf(value);
-        const newChecked = [...checked];
-
-        if (currentIndex === -1) {
-            newChecked.push(value);
-        } else {
-            newChecked.splice(currentIndex, 1);
+        if (user) {
+            axios
+                .get(`/receptionist/ser`)
+                .then((res) => {
+                    const user1 = res.data;
+                    setTeamData(user1);
+                })
+                .catch((error) => console.log(error));
         }
-
-        setChecked(newChecked);
-    };
-
-    const handleAllRight = () => {
-        setRight(right.concat(left));
-        setLeft([]);
-    };
-
-    const handleCheckedRight = () => {
-        setRight(right.concat(leftChecked));
-        setLeft(not(left, leftChecked));
-        setChecked(not(checked, leftChecked));
-    };
-
-    const handleCheckedLeft = () => {
-        setLeft(left.concat(rightChecked));
-        setRight(not(right, rightChecked));
-        setChecked(not(checked, rightChecked));
-    };
-
-    const handleAllLeft = () => {
-        setLeft(left.concat(right));
-        setRight([]);
-    };
-
-    const handleFormSubmit = (values, { resetForm }) => {
-        const serviceIds = right.map((item) => item.id);
-        if (user && isReceptionist(user.accessToken)) {
-            if (right.length !== 0) {
-                const data = {
-                    phone: values.phone,
-                    idReceptionist: user.id,
-                    total: totalPrice,
-                    time: values.time,
-                    date: moment().add(0, 'days').format('DD/MM/YYYY'),
-                    serviceId: serviceIds,
-                };
-                axios
-                    .post(`/receptionist`, data)
+    }, [user]);
+    
+    const handleAcceptClick = (id) => {
+        Swal.fire({
+            html: `<h4>Xác nhận Bài đăng!</h4>`,
+            // input: 'number',
+            showCancelButton: true,
+            confirmButtonText: 'Xác nhận',
+            cancelButtonText: 'Đóng',
+            showLoaderOnConfirm: true,
+            confirmButtonColor: '#4caf50',
+            cancelButtonColor: ' #D3D3D3',
+            allowOutsideClick: false,
+            preConfirm: (code) => {
+                return axios
+                    .get(`/receptionist/acceptSer/${id}`)
                     .then((res) => {
-                        if (res.data === 'done') {
-                            resetForm();
-                            setLeft(left.concat(right));
-                            setRight([]);
-                            toast.success('Tạo mới đơn hàng thành công!', {
-                                position: 'top-right',
-                                autoClose: 5000,
-                                hideProgressBar: false,
-                                closeOnClick: true,
-                                pauseOnHover: true,
-                                draggable: true,
-                                progress: undefined,
-                                theme: 'light',
+                        if (id === res.data) {
+                            const updatedTeamData = teamData.map((booking) => {
+                                if (booking.id === id) {
+                                    return { ...booking, status: 0 };
+                                }
+                                return booking;
                             });
+                            setTeamData(updatedTeamData);
                         }
                     })
                     .catch((error) => console.log(error));
-            } else {
-                toast.warning('Bạn chưa chọn dịch vụ!', {
-                    position: 'top-right',
-                    autoClose: 5000,
-                    hideProgressBar: false,
-                    closeOnClick: true,
-                    pauseOnHover: true,
-                    draggable: true,
-                    progress: undefined,
-                    theme: 'light',
-                });
-            }
-        }
+            },
+        });
     };
+    const huy= (id) => {
+        var ins =-1;
+        Swal.fire({
+            html: `<h4>Xác nhận hủy!</h4>`,
+            // input: 'number',
+            showCancelButton: true,
+            confirmButtonText: 'Xác nhận',
+            cancelButtonText: 'Đóng',
+            showLoaderOnConfirm: true,
+            confirmButtonColor: '#4caf50',
+            cancelButtonColor: ' #D3D3D3',
+            allowOutsideClick: false,
+            preConfirm: (code) => {
+                return axios
+                    .get(`/receptionist/remove/${id}`)
+                    .then((res) => {
+                        if (id === res.data) {
+                            const newArray = teamData.filter(item => item.id !== id);
+                            setTeamData(newArray)
+                        }
+                    })
+                    .catch((error) => console.log(error));
+                
+            },
+        });
+    };
+    const handlePaymentClick = (id) => {
+        Swal.fire({
+            html: `<h4>Xác nhận đơn hàng đã được thánh toán!</h4>`,
+            // input: 'number',
+            showCancelButton: true,
+            confirmButtonText: 'Xác nhận',
+            cancelButtonText: 'Đóng',
+            showLoaderOnConfirm: true,
+            confirmButtonColor: '#4caf50',
+            cancelButtonColor: ' #D3D3D3',
+            allowOutsideClick: false,
+            preConfirm: (code) => {
+                return axios
+                    .get(`/receptionist/payment/${id}`)
+                    .then((res) => {
+                        if (id === res.data) {
+                            const updatedTeamData = teamData.map((booking) => {
+                                if (booking.id === id) {
+                                    return { ...booking, payment: 1 };
+                                }
+                                return booking;
+                            });
+                            setTeamData(updatedTeamData);
+                        }
+                    })
+                    .catch((error) => console.log(error));
+            },
+        });
+    };
+    const columns = [
+        { field: 'id', headerName: 'ID' },
+        {
+            field: 'name',
+            headerName: 'Tên',
+            flex: 1,
+            renderCell: ({ row }) => {
+                if (row.name) {
+                    return row.name;
+                } else {
+                    return 'Khách hàng';
+                }
+            },
+        },
+        {
+            field: 'description',
+            headerName: 'Mô tả',
+            type: 'text',
+            headerAlign: 'left',
+            align: 'left',
+            flex: 1,
+            renderCell: ({ row }) => {
+                const timestamp = row.time;
+                if (timestamp) {
+                    return row.date + ' | ' + row.time.times;
+                } else {
+                    return row.date;
+                }
+            },
+        },
+        {
+            field: 'img',
+            headerName: 'Ảnh',
+            flex: 1,
+            renderCell: ({ row }) => {
+                return <img src={row.img} style={{height:"60px",width:"60px"}} alt="" />
+            },
+        },
+        {
+            field: 'status',
+            headerName: 'Trạng thái',
+            flex: 1,
+            renderCell: ({ row }) => {
+                return row.status === 1 ? 'Đang chờ' :  row.status === 2 ?'hủy' : row.status === 0 ? 'Đã xác nhận' : 'không';
+            },
+        },
+        
+        {
+            field: 'price',
+            headerName: 'Giá',
+            flex: 1,
+        },
+        {
+            field: 'Hủy',
+            headerName: 'Hủy đơn hàng',
+            flex: 1,
+            renderCell: ({ row }) => {
+                return row.status == 1 ? (
+                    <Box>
+                        <Button
+                            color="secondary"
+                            variant="contained"
+                            sx={{ fontFamily: 'Lora, serif' }}
+                            onClick={() => huy(row.id)}
+                        >
+                            Hủy
+                        </Button>
+                    </Box>
+                ) : null;
+            },
+        },
+        {
+            field: 'action',
+            headerName: 'Xác nhận',
+            flex: 1,
+            renderCell: ({ row }) => {
+                return row.status === 1 ? (
+                    <Box>
+                        <Button
+                            color="success"
+                            variant="contained"
+                            sx={{ fontFamily: 'Lora, serif' }}
+                            onClick={() => handleAcceptClick(row.id)}
+                        >
+                            Xác nhận
+                        </Button>
+                    </Box>
+                ) : null;
+            },
+        },
 
-    const customList = (items) => (
-        <Paper sx={{ width: 300, height: 430, overflow: 'auto', border: '1px solid #000' }}>
-            <List dense component="div" role="list">
-                {items.map((value) => {
-                    const labelId = `transfer-list-item-${value.id}-label`;
-
-                    return (
-                        <ListItem key={value.id} role="listitem" button onClick={handleToggle(value)}>
-                            <ListItemIcon>
-                                <Checkbox
-                                    checked={checked.indexOf(value) !== -1}
-                                    tabIndex={-1}
-                                    disableRipple
-                                    inputProps={{
-                                        'aria-labelledby': labelId,
-                                    }}
-                                />
-                            </ListItemIcon>
-                            <ListItemText
-                                id={labelId}
-                                primary={`Dịch vụ ${value.name}`}
-                                sx={{
-                                    '& span': {
-                                        fontFamily: 'Lora, serif',
-                                        fontSize: '16px',
-                                    },
-                                }}
-                            />
-                        </ListItem>
-                    );
-                })}
-            </List>
-        </Paper>
-    );
-
-    return user && isReceptionist(user.accessToken) ? (
+    ];
+    return user && isAdmin(user.accessToken) ? (
         <>
-            <div className="container">
-                <Box m="20px" sx={{ fontFamily: 'Lora, serif' }}>
-                    <Formik onSubmit={handleFormSubmit} initialValues={initialValues} validationSchema={checkoutSchema}>
-                        {({ values, errors, touched, handleBlur, handleChange, handleSubmit }) => (
-                            <form onSubmit={handleSubmit}>
-                                <Box
-                                    display="grid"
-                                    gap="30px"
-                                    gridTemplateColumns="repeat(4, minmax(0, 1fr))"
-                                    sx={{
-                                        '& > div': { gridColumn: isNonMobile ? undefined : 'span 4' },
-                                    }}
-                                >
-                                    <TextField
-                                        fullWidth
-                                        variant="filled"
-                                        type="text"
-                                        label="Số điện thoại"
-                                        onBlur={handleBlur}
-                                        onChange={handleChange}
-                                        value={values.phone}
-                                        name="phone"
-                                        error={!!touched.phone && !!errors.phone}
-                                        helperText={touched.phone && errors.phone}
-                                        sx={{
-                                            gridColumn: 'span 4',
-                                            fontSize: '26px',
-
-                                            '& label': {
-                                                fontFamily: 'Lora, serif',
-                                                fontSize: '18px',
-                                            },
-                                            '& input': {
-                                                fontFamily: 'Lora, serif',
-                                                fontSize: '16px',
-                                            },
-                                            '& p': {
-                                                fontFamily: 'Lora, serif',
-                                                fontSize: '12px',
-                                            },
-                                        }}
-                                    />
-                                    <TextField
-                                        fullWidth
-                                        variant="filled"
-                                        select
-                                        label="Chọn giờ"
-                                        onBlur={handleBlur}
-                                        onChange={handleChange}
-                                        value={values.time}
-                                        name="time"
-                                        error={!!touched.time && !!errors.time}
-                                        helperText={touched.time && errors.time}
-                                        sx={{
-                                            gridColumn: 'span 4',
-                                            fontSize: '26px',
-
-                                            '& label': {
-                                                fontFamily: 'Lora, serif',
-                                                fontSize: '18px',
-                                            },
-                                            '& input': {
-                                                fontFamily: 'Lora, serif',
-                                                fontSize: '16px',
-                                            },
-                                            '& p': {
-                                                fontFamily: 'Lora, serif',
-                                                fontSize: '12px',
-                                            },
-                                            '& div': {
-                                                fontFamily: 'Lora, serif',
-                                                fontSize: '12px',
-                                            },
-                                        }}
-                                    >
-                                        <MenuItem
-                                            key={-1}
-                                            value={0}
-                                            sx={{ fontFamily: 'Lora, serif', fontSize: '12px' }}
-                                        >
-                                            Chọn giờ
-                                        </MenuItem>
-                                        {time.map((value) => {
-                                            return (
-                                                <MenuItem
-                                                    key={value.id}
-                                                    value={value.id}
-                                                    sx={{ fontFamily: 'Lora, serif', fontSize: '12px' }}
-                                                >
-                                                    {value.time}
-                                                </MenuItem>
-                                            );
-                                        })}
-                                    </TextField>
-                                </Box>
-                                <Grid
-                                    container
-                                    spacing={2}
-                                    justifyContent="center"
-                                    alignItems="center"
-                                    style={{ marginTop: '20px' }}
-                                >
-                                    <Grid item>{customList(left)}</Grid>
-                                    <Grid item>
-                                        <Grid container direction="column" alignItems="center">
-                                            <Button
-                                                style={{
-                                                    my: 0.5,
-                                                    backgroundColor: 'black',
-                                                    color: 'white',
-                                                    padding: '4px 12px',
-                                                    fontSize: '14px',
-                                                }}
-                                                variant="outlined"
-                                                size="small"
-                                                onClick={handleAllRight}
-                                                disabled={left.length === 0}
-                                                aria-label="move all right"
-                                            >
-                                                ≫
-                                            </Button>
-                                            <Button
-                                                style={{
-                                                    my: 0.5,
-                                                    marginTop: '5px',
-                                                    backgroundColor: 'black',
-                                                    color: 'white',
-                                                    padding: '4px 12px',
-                                                    fontSize: '14px',
-                                                }}
-                                                variant="outlined"
-                                                size="small"
-                                                onClick={handleCheckedRight}
-                                                disabled={leftChecked.length === 0}
-                                                aria-label="move selected right"
-                                            >
-                                                &gt;
-                                            </Button>
-                                            <Button
-                                                style={{
-                                                    my: 0.5,
-                                                    marginTop: '5px',
-                                                    backgroundColor: 'black',
-                                                    color: 'white',
-                                                    padding: '4px 12px',
-                                                    fontSize: '14px',
-                                                }}
-                                                variant="outlined"
-                                                size="small"
-                                                onClick={handleCheckedLeft}
-                                                disabled={rightChecked.length === 0}
-                                                aria-label="move selected left"
-                                            >
-                                                &lt;
-                                            </Button>
-                                            <Button
-                                                style={{
-                                                    my: 0.5,
-                                                    marginTop: '5px',
-                                                    backgroundColor: 'black',
-                                                    color: 'white',
-                                                    padding: '4px 12px',
-                                                    fontSize: '14px',
-                                                }}
-                                                variant="outlined"
-                                                size="small"
-                                                onClick={handleAllLeft}
-                                                disabled={right.length === 0}
-                                                aria-label="move all left"
-                                            >
-                                                ≪
-                                            </Button>
-                                        </Grid>
-                                    </Grid>
-                                    <Grid item>{customList(right)}</Grid>
-                                </Grid>
-                                <div style={{ textAlign: 'end', fontSize: '3rem', marginTop: '20px' }}>
-                                    Tổng tiền: <span>{totalPrice.toLocaleString('en-US')}</span> VNĐ
-                                </div>
-                                <Box display="flex" justifyContent="end" mt="20px">
-                                    <Button
-                                        type="submit"
-                                        color="secondary"
-                                        variant="contained"
-                                        sx={{
-                                            backgroundColor: 'black',
-                                            color: 'white',
-                                            padding: '10px 20px',
-                                            fontSize: '14px',
-                                            '&:hover': {
-                                                backgroundColor: '#333',
-                                            },
-                                        }}
-                                    >
-                                        Tạo dịch vụ
-                                    </Button>
-                                </Box>
-                            </form>
-                        )}
-                    </Formik>
+            <div style={{ width: '100%', height: '100%' }}>
+                <Box
+                    m="40px"
+                    height="90vh"
+                    sx={{
+                        '& .MuiDataGrid-root': {
+                            border: '1px solid #ccc',
+                            fontSize: '14px',
+                        },
+                        '& .MuiDataGrid-cell': {
+                            borderBottom: '1px solid #333',
+                            backgroundColor: '#fbfbfb1',
+                        },
+                        '& .name-column--cell': {
+                            backgroundColor: '#fbfbfb1',
+                            border: '1px solid #ccc',
+                        },
+                        '& .MuiDataGrid-columnHeaders': {
+                            backgroundColor: '#000',
+                            color: '#fff',
+                            border: '1px solid #ccc',
+                        },
+                        '& .MuiDataGrid-virtualScroller': {
+                            backgroundColor: '#fbfbfb1',
+                            border: '1px solid #ccc',
+                        },
+                        '& .MuiDataGrid-footerContainer': {
+                            backgroundColor: '#000',
+                            border: '1px solid #ccc',
+                            '& p': {
+                                fontSize: '14px',
+                                color: '#fff',
+                            },
+                        },
+                        '& .MuiCheckbox-root': {
+                            color: '#fbfbfb1 !important',
+                        },
+                        '& .MuiToolbar-root': {
+                            fontSize: '14px',
+                            color: '#fff',
+                        },
+                    }}
+                >
+                    <DataGrid
+                        rows={teamData}
+                        columns={columns}
+                        localeText={viVN.components.MuiDataGrid.defaultProps.localeText}
+                        sx={{ wordWrap: 'break-word' }}
+                    />
                 </Box>
             </div>
-            <ToastContainer />
         </>
     ) : (
         navigate('/accessDeny')
     );
 }
-const phoneRegExp = /^((\+[1-9]{1,4}[ -]?)|(\([0-9]{2,3}\)[ -]?)|([0-9]{2,4})[ -]?)*?[0-9]{3,4}[ -]?[0-9]{3,4}$/;
-const checkoutSchema = yup.object().shape({
-    phone: yup.string().matches(phoneRegExp, 'Số điện thoại không hợp lệ!').required('Vui lòng nhập số điện thoại!'),
-    time: yup.number().notOneOf([0], 'Vui lòng chọn giờ!'),
-});
-const initialValues = {
-    time: 0,
-    phone: '',
-};
-export default BookOff;
+
+export default AcceptService;

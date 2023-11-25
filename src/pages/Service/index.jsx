@@ -92,7 +92,7 @@ function Service() {
                     <div  className="xe"><img style={{width:"70px",borderRadius:"25%",heightL:"70px"}}  onClick={(e)=>da(1)} src={process.env.PUBLIC_URL + '/img/xe1.jpg'} alt="" />
                     <p>Xe cộ</p></div>
                     <div className="xe"><img style={{width:"70px",borderRadius:"25%",heightL:"70px"}} onClick={(e)=>da(2)} src={process.env.PUBLIC_URL + '/img/xe1.jpg'} alt="" />
-                    <p>Xe cộ</p></div>
+                    <p>đồ điện tử</p></div>
                     <div className="xe"><img style={{width:"70px",borderRadius:"25%",heightL:"70px"}} onClick={(e)=>da(3)} src={process.env.PUBLIC_URL + '/img/xe1.jpg'} alt="" />
                     <p>Xe cộ</p></div>
                     <div className="xe"><img style={{width:"70px",borderRadius:"25%",heightL:"70px"}} onClick={(e)=>da(4)} src={process.env.PUBLIC_URL + '/img/xe1.jpg'} alt="" />
@@ -114,9 +114,8 @@ function Service() {
                     ))}
                     </div>)
                         }
-                
                 <div className="paginate-wrapper">
-                    <ReactPaginate
+                <ReactPaginate
                         previousLabel={<MdKeyboardArrowLeft size={24} />}
                         nextLabel={<MdKeyboardArrowRight size={24} />}
                         breakLabel={'...'}
@@ -127,9 +126,13 @@ function Service() {
                         onPageChange={handlePageChange}
                         containerClassName={'paginateContainer'}
                         activeClassName={'active'}
+                        className={'s'}
                     />
-                </div>
+                    </div>
             </section>
+            
+                    
+                
         </div>
     );
 }

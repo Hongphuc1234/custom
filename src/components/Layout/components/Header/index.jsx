@@ -170,9 +170,34 @@ function Header() {
                         </li>
                     )}
                     {user && isAdmin(user.accessToken) && (
-                        <li>
-                        <Link className={cx('element')} to={'/accept'}>Xác nhận</Link>
-                    </li>
+                         <Tippy
+                         //  content="Tài khoản "
+                         hideOnClick={true}
+                         trigger="click"
+                         placement="bottom"
+                         interactive
+                         render={(attrs) => (
+                             <div className={cx('box_tippy')} tabIndex="-1" {...attrs} style={{ height: '80px' }}>
+                                 <ul>
+                                     <li>
+                                         <Link to={'/bookOff'}>Dịch vụ</Link>
+                                     </li>
+                                     <li>
+                                         <Link to={'/accept'}>Đơn hàng</Link>
+                                     </li>
+                                 </ul>
+                             </div>
+                         )}
+                     >
+                         <li
+                             className={cx(
+                                 'element',
+                                 (currentURL === '/bookOff' || currentURL === '/accept') && 'header-active',
+                             )}
+                         >
+                             Xác Nhận
+                         </li>
+                     </Tippy>
                     )}
                 </ul>
                 {!user ? (
@@ -241,7 +266,10 @@ function Header() {
                                                 <li>Hồ sơ</li>
                                             </Link>
                                             <Link to={'/user-history'} onClick={() => setStatus(!status)}>
-                                                <li>Lịch sử</li>
+                                                <li>Lịch sử đặt hàng</li>
+                                            </Link>
+                                            <Link to={'/listpost'} onClick={() => setStatus(!status)}>
+                                                <li>Bài đã đăng</li>
                                             </Link>
                                             <Link to={'/resetpage'}>
                                                 <li>Đổi mật khẩu</li>
@@ -271,7 +299,7 @@ function Header() {
             <div className={cx('mobile')}>
                 <div className={cx('mobile-header')}>
                     <div className={cx('text-logo-box')}>
-                        <h2 className={cx('text-logo')}>SALON SPACE</h2>
+                        <h2 className={cx('text-logo')}>MarketHome</h2>
                     </div>
                     {user && (
                         <div className={cx('actions')}>
@@ -302,45 +330,7 @@ function Header() {
                                     </Badge>
                                 </IconButton>
                             </Link>
-                            <Tippy
-                                hideOnClick={true}
-                                trigger="click"
-                                placement="bottom"
-                                interactive
-                                render={(attrs) => (
-                                    <div className={cx('box_notification')} tabIndex="-1" {...attrs}>
-                                        <h1>Thông báo</h1>
-                                        <ul>
-                                            {notification.length === 0 && <li> Bạn không có thông báo nào!</li>}
-                                            {notification.map((value) => (
-                                                <li
-                                                    key={value.id}
-                                                    className={cx(value.status === 0 ? 'background-EBEDF0' : '')}
-                                                >
-                                                    <span>{value.text}</span>
-                                                    <span>{formatTimeAgo(value.date)}</span>
-                                                </li>
-                                            ))}
-                                        </ul>
-                                        <div className={cx('box_notification_bottom')} onClick={maskRead}>
-                                            <span className={cx('check-icon')}>
-                                                <AiOutlineCheck />
-                                            </span>
-                                            Đánh dấu đã đọc
-                                        </div>
-                                    </div>
-                                )}
-                            >
-                                <IconButton className={cx('action-button')}>
-                                    <Badge
-                                        badgeContent={notificationCount}
-                                        color="error"
-                                        sx={{ '& .MuiBadge-badge': { fontSize: 15, height: 15, minWidth: 15 } }}
-                                    >
-                                        <AiFillBell size={28} />
-                                    </Badge>
-                                </IconButton>
-                            </Tippy>
+                            
                         </div>
                     )}
                     <div onClick={() => setStatus(!status)} className={cx('action-button')}>
