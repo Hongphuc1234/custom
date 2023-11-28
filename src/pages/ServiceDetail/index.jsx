@@ -83,9 +83,13 @@ function ServiceDetail() {
                 axios
                 .get(`/service/detail1/${response.data.id}`)
                 .then((response) => {
-                    console.log("111111111111111111111")
-                    console.log(response.data)
+                    const newArray = response.data;
+                    console.log(newArray)
+                    console.log('-------------------------')
+                  
+                
                     setExlist(response.data);
+                 
                 })
                 .catch((error) => {
                     console.error('Error fetching service detail:', error);
@@ -95,7 +99,6 @@ function ServiceDetail() {
                 console.error('Error fetching service detail:', error);
             });
     }, [id]);
-
     if (!serviceDetail) {
         return <div>Loading...</div>; // You can render a loading indicator while waiting for data to be fetched
     }
@@ -147,7 +150,8 @@ function ServiceDetail() {
                 </GridView>
                 <div className="list"  >
                     {exlist?.map((ex) => (
-                    <ServiceItem id={ex.id} imgUrl={ex.img} title={ex.name}  />    
+                        ex.id !== id ?  (
+                    <ServiceItem id={ex.id} imgUrl={ex.img} title={ex.name}  />  ):null  
                      ))}
                     </div>
             </Wrapper>
