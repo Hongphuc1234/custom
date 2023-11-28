@@ -182,7 +182,7 @@ const Form = () => {
             native: true,
           }}
         ><option value={0}>
-        Chọn loại dịch vụ 
+        Chọn loại 
         </option>
             <option value={1}>
             XE
